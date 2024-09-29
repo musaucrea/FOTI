@@ -6,6 +6,8 @@ import Home from './pages/Home';
 import TourPackages from './pages/TourPackages';
 import Research from './pages/Research';
 import Careers from './pages/Careers';
+//import heroimage1 from '../assets/images/heroimage1.svg'; // Adjust the path as needed
+
 
 function App() {
   return (
