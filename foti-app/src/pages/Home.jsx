@@ -38,7 +38,7 @@ const Home = () => {
 
       {/* About Us Section */}
       <section id="about" className="mt-12">
-        <h2 className="text-4xl font-bold text-[#1E3A8A]">Who are we </h2>
+        <h2 className="text-4xl font-bold text-[#1E3A8A]">About us </h2>
         <div className="flex flex-col md:flex-row mt-4">
           <div className="md:w-1/2 p-4">
             <p className="text-lg">FoTI empowers tourism students to research, create, and sell products. Approved tour packages must deliver a documentary and academic publication. Students manage business operations alongside their studies, with minimal supervision, and profits fund further research.
@@ -74,16 +74,62 @@ Research is shared through YouTube documentaries and the FoTI Journal. Their wor
       </section>
 
       {/* Success Stories Section */}
-      <section id="success-stories" className="mt-12">
-        <h2 className="text-4xl font-bold text-[#1E3A8A]">Student Success Stories</h2>
-        <div className="mt-4">
-          {/* Add a carousel or grid for stories */}
-        </div>
-      </section>
+      <section id="success-stories" className="mt-12 px-4">
+  <h2 className="text-4xl font-bold text-[#1E3A8A] text-center">
+    Student Success Stories
+  </h2>
+  <p className="text-lg text-gray-700 mt-4 text-center max-w-3xl mx-auto">
+    Real Stories, Real Impact. Discover how FoTI students are shaping the future of tourism with their innovative ideas. Each of these student-driven tourism projects showcases creativity, entrepreneurship, and real-world success.
+  </p>
+
+  <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-8">
+    {/* Story 1 */}
+    <div className="bg-white shadow-md rounded-lg p-6 hover:shadow-lg transition-shadow duration-300">
+      <h3 className="text-2xl font-semibold text-[#1E3A8A]">
+        Adventure Through the Heart of Africa
+      </h3>
+      <p className="text-gray-600 mt-2">
+        Meet Sarah, an undergraduate who created a cultural immersion tour that captured the attention of global tourists.
+      </p>
+      <a 
+        href="#"
+        className="mt-4 inline-block text-[#F97316] font-medium hover:underline"
+      >
+        Watch the Documentary
+      </a>
+    </div>
+
+    {/* Story 2 */}
+    <div className="bg-white shadow-md rounded-lg p-6 hover:shadow-lg transition-shadow duration-300">
+      <h3 className="text-2xl font-semibold text-[#1E3A8A]">
+        Sustainable Tourism in Kenya
+      </h3>
+      <p className="text-gray-600 mt-2">
+        John, a postgraduate student, developed a sustainable eco-tour that contributed to local wildlife conservation.
+      </p>
+      <a 
+        href="#"
+        className="mt-4 inline-block text-[#F97316] font-medium hover:underline"
+      >
+        Read the Publication
+      </a>
+    </div>
+  </div>
+
+  <div className="mt-8 text-center">
+    <a 
+      href="#"
+      className="inline-block bg-[#F97316] text-white py-2 px-6 rounded-md hover:bg-[#F97316]/80 transition duration-300"
+    >
+      See More Success Stories
+    </a>
+  </div>
+</section>
+
 
       {/* Why FoTI Section */}
       <section id="why-foti" className="mt-12">
-        <h2 className="text-4xl font-bold text-[#1E3A8A]">Why Choose FoTI?</h2>
+        <h2 className="text-4xl font-bold text-[#1E3A8A]">Why FoTI?</h2>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mt-4">
           {/* Key Features */}
           <div className="p-4 border rounded-lg">
