@@ -63,7 +63,7 @@ const Home = () => {
           <button className="bg-[#16A34A] text-white py-2 px-4 rounded hover:bg-[#F97316]">Donate</button>
         </nav>
       </header>
-
+      
       {/* Hero Section */}
       <div className="relative w-full h-screen mt-8">
         <img 

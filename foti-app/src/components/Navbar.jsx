@@ -46,7 +46,7 @@ const Navbar = () => {
               isActive ? 'font-bold text-blue-600' : 'text-gray-700 hover:text-blue-600'
             }
           >
-            Students
+            FoTI Ventures
           </NavLink>
         </div>
 
@@ -184,7 +184,7 @@ const Navbar = () => {
                 className="bg-orange-500 text-white py-2 px-4 rounded-md hover:bg-orange-600 transition duration-300 text-center"
                 onClick={() => setIsOpen(false)}
               >
-                Donate
+                Contact Us
               </NavLink>
             </li>
           </ul>
