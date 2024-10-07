@@ -41,7 +41,7 @@ const Navbar = () => {
             Research
           </NavLink>
           <NavLink 
-            to="/students" 
+            to="/fotiventure" 
             className={({ isActive }) => 
               isActive ? 'font-bold text-blue-600' : 'text-gray-700 hover:text-blue-600'
             }

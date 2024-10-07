@@ -54,18 +54,10 @@ const Home = () => {
   return (
     <div className="bg-white text-gray-800 p-8">
       {/* Header Section */}
-      <header className="flex justify-between items-center">
-        <div className="text-3xl font-bold text-[#1877F2]">FoTI</div>
-        <nav className="space-x-4">
-          <a href="#programs" className="text-[#1E3A8A] hover:text-[#F97316]">Programs</a>
-          <a href="#tour-packages" className="text-[#1E3A8A] hover:text-[#F97316]">Tour Packages</a>
-          <a href="#contact" className="text-[#1E3A8A] hover:text-[#F97316]">Contact</a>
-          <button className="bg-[#16A34A] text-white py-2 px-4 rounded hover:bg-[#F97316]">Donate</button>
-        </nav>
-      </header>
+     
       
       {/* Hero Section */}
-      <div className="relative w-full h-screen mt-8">
+      <div className="relative w-full h-screen mt-8 mx-0">
         <img 
           src="/src/assets/heroimage1.svg" 
           alt="Tourism" 
@@ -357,16 +349,7 @@ const Home = () => {
       </section>
 
       {/* Footer Section */}
-      <footer className="mt-12 text-center">
-        <div className="p-4">
-          <a href="#about" className="text-[#1E3A8A] hover:text-[#F97316]">About Us</a>
-          <span className="mx-2">|</span>
-          <a href="#programs" className="text-[#1E3A8A] hover:text-[#F97316]">Programs</a>
-          <span className="mx-2">|</span>
-          <a href="#contact" className="text-[#1E3A8A] hover:text-[#F97316]">Contact</a>
-        </div>
-        <div className="text-gray-500">© 2024 Foundations of Tourism Institute</div>
-      </footer>
+      <footer/>
     </div>
   );
 }

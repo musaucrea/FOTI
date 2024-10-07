@@ -1,6 +1,6 @@
 // src/pages/Research.jsx
 import React from 'react';
-
+import Footer from './components/Footer';
 const Research = () => {
   return (
     <div className="p-8">
@@ -14,6 +14,7 @@ const Research = () => {
           <button className="mt-4 bg-blue-600 text-white p-2 rounded">Read More</button>
         </div>
         {/* More research entries */}
+        <Footer />
       </div>
     </div>
   );
