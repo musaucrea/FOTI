@@ -22,7 +22,7 @@ const TourPackages = () => {
 
   return (
     <div className="p-16">
-      <h2 className="text-3xl font-bold text-[#1E3A8A]">Tour Packages</h2>
+      <h2 className="text-3xl font-bold text-[#1877F2]">Tour Packages</h2>
       <p className="mt-4">
         View and explore student-developed tour packages that combine innovation and academic research.
       </p>

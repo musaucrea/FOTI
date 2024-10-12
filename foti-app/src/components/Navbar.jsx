@@ -15,7 +15,7 @@ const Navbar = () => {
         </div>
 
         {/* Center Section: Main Navigation Links */}
-        <div className="hidden md:flex space-x-8">
+        <div className="hidden md:flex space-x-10 text-center">
           <NavLink 
             to="/" 
             className={({ isActive }) => 
@@ -61,7 +61,7 @@ const Navbar = () => {
             Sign In
           </NavLink>
           <NavLink 
-            to="/sign-up" 
+            to="/SignUp" 
             className={({ isActive }) => 
               isActive ? 'font-bold text-blue-600' : 'text-gray-700 hover:text-blue-600'
             }

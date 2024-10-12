@@ -1,38 +1,84 @@
-// src/pages/SignUp.jsx
-
-import React, { useState } from 'react';
+// src/SignUp.jsx
+import { useState, useContext, useEffect } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import ReCAPTCHA from 'react-google-recaptcha';
-import PasswordStrength from '../components/PasswordStrength'; // Adjusted import statement
+import PasswordStrength from '../components/PasswordStrength'; // Ensure this component exists
+import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../contexts/AuthContext';
 
 const SignUp = () => {
   const [password, setPassword] = useState('');
+  const [captchaValue, setCaptchaValue] = useState(null);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [currentlyStudying, setCurrentlyStudying] = useState(false);
+  const navigate = useNavigate();
+  const { login } = useContext(AuthContext);
 
   const formik = useFormik({
     initialValues: {
-      fullName: '',
+      studentName: '',
       email: '',
       password: '',
       confirmPassword: '',
       phoneNumber: '',
-      organization: '',
-      interests: '',
+      university: '',
+      course: '',
+      graduationYear: '',
+      currentlyStudying: false,
+      gender: '',
+      interestsInFoTI: '',
     },
     validationSchema: Yup.object({
-      fullName: Yup.string().required('Required'),
-      email: Yup.string().email('Invalid email format').required('Required'),
-      password: Yup.string().required('Required'),
+      studentName: Yup.string().required('Student Name is required'),
+      email: Yup.string()
+        .email('Invalid email format')
+        .required('Email is required'),
+      password: Yup.string()
+        .min(6, 'Password must be at least 6 characters')
+        .required('Password is required'),
       confirmPassword: Yup.string()
         .oneOf([Yup.ref('password'), null], 'Passwords must match')
-        .required('Required'),
-      phoneNumber: Yup.string(),
-      organization: Yup.string(),
-      interests: Yup.string(),
+        .required('Confirm Password is required'),
+      phoneNumber: Yup.string().matches(
+        /^\+?[1-9]\d{1,14}$/,
+        'Invalid phone number'
+      ),
+      university: Yup.string().required('University is required'),
+      course: Yup.string().required('Course is required'),
+      graduationYear: Yup.string().when('currentlyStudying', {
+        is: false,
+        then: Yup.string()
+          .matches(/^\d{4}$/, 'Enter a valid year')
+          .required('Year of Graduation is required'),
+        otherwise: Yup.string().notRequired(),
+      }),
+      currentlyStudying: Yup.boolean(),
+      gender: Yup.string().required('Gender is required'),
+      interestsInFoTI: Yup.string().required('Please specify your interests in FoTI'),
     }),
-    onSubmit: (values) => {
-      // Handle form submission
-      console.log(values);
+    onSubmit: async (values, { setSubmitting }) => {
+      if (!captchaValue) {
+        setErrorMessage('Please verify that you are not a robot.');
+        setSubmitting(false);
+        return;
+      }
+
+      try {
+        const response = await fakeSignUpApi(values, captchaValue);
+
+        if (response.success) {
+          login(response.user);
+          navigate('/dashboard');
+        } else {
+          setErrorMessage(response.message || 'Sign-up failed.');
+        }
+      } catch (error) {
+        console.error('Sign-up error:', error);
+        setErrorMessage('An error occurred during sign-up. Please try again.');
+      } finally {
+        setSubmitting(false);
+      }
     },
   });
 
@@ -41,85 +87,293 @@ const SignUp = () => {
     formik.handleChange(e);
   };
 
+  const handleCaptchaChange = (value) => {
+    setCaptchaValue(value);
+    setErrorMessage('');
+  };
+
+  const handleCurrentlyStudyingChange = (e) => {
+    const isChecked = e.target.checked;
+    setCurrentlyStudying(isChecked);
+    formik.setFieldValue('currentlyStudying', isChecked);
+    if (isChecked) {
+      formik.setFieldValue('graduationYear', '');
+    }
+  };
+
+  const fakeSignUpApi = (values, captchaToken) => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve({
+          success: true,
+          user: {
+            studentName: values.studentName,
+            email: values.email,
+          },
+        });
+      }, 1500);
+    });
+  };
+
+  useEffect(() => {
+    if (formik.values.currentlyStudying) {
+      formik.setFieldValue('graduationYear', '');
+    }
+  }, [formik.values.currentlyStudying]);
+
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Sign Up</h1>
-      <form onSubmit={formik.handleSubmit} className="space-y-4">
-        <input
-          type="text"
-          name="fullName"
-          placeholder="Full Name"
-          onChange={formik.handleChange}
-          value={formik.values.fullName}
-          className="border border-gray-300 p-2 w-full rounded"
-        />
-        {formik.errors.fullName && <p className="text-red-600">{formik.errors.fullName}</p>}
+    <div className="container mx-auto p-6 max-w-2xl">
+      <h1 className="text-3xl font-bold text-center mb-6">Register for Endless Possibilities</h1>
+      <form onSubmit={formik.handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Student Name */}
+        <div>
+          <input
+            type="text"
+            name="studentName"
+            placeholder="Student Name"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.studentName}
+            className={`border p-3 w-full rounded ${
+              formik.touched.studentName && formik.errors.studentName
+                ? 'border-red-500'
+                : 'border-gray-300'
+            }`}
+          />
+          {formik.touched.studentName && formik.errors.studentName && (
+            <p className="text-red-600 text-sm mt-1">{formik.errors.studentName}</p>
+          )}
+        </div>
 
-        <input
-          type="email"
-          name="email"
-          placeholder="Email Address"
-          onChange={formik.handleChange}
-          value={formik.values.email}
-          className="border border-gray-300 p-2 w-full rounded"
-        />
-        {formik.errors.email && <p className="text-red-600">{formik.errors.email}</p>}
+        {/* Email Address */}
+        <div>
+          <input
+            type="email"
+            name="email"
+            placeholder="Email Address"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.email}
+            className={`border p-3 w-full rounded ${
+              formik.touched.email && formik.errors.email
+                ? 'border-red-500'
+                : 'border-gray-300'
+            }`}
+          />
+          {formik.touched.email && formik.errors.email && (
+            <p className="text-red-600 text-sm mt-1">{formik.errors.email}</p>
+          )}
+        </div>
 
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          onChange={handlePasswordChange}
-          value={password}
-          className="border border-gray-300 p-2 w-full rounded"
-        />
-        {formik.errors.password && <p className="text-red-600">{formik.errors.password}</p>}
-        
-        <PasswordStrength password={password} />
+        {/* Password */}
+        <div>
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            onChange={handlePasswordChange}
+            onBlur={formik.handleBlur}
+            value={password}
+            className={`border p-3 w-full rounded ${
+              formik.touched.password && formik.errors.password
+                ? 'border-red-500'
+                : 'border-gray-300'
+            }`}
+          />
+          {formik.touched.password && formik.errors.password && (
+            <p className="text-red-600 text-sm mt-1">{formik.errors.password}</p>
+          )}
+        </div>
 
-        <input
-          type="password"
-          name="confirmPassword"
-          placeholder="Confirm Password"
-          onChange={formik.handleChange}
-          value={formik.values.confirmPassword}
-          className="border border-gray-300 p-2 w-full rounded"
-        />
-        {formik.errors.confirmPassword && <p className="text-red-600">{formik.errors.confirmPassword}</p>}
+        {/* Confirm Password */}
+        <div>
+          <input
+            type="password"
+            name="confirmPassword"
+            placeholder="Confirm Password"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.confirmPassword}
+            className={`border p-3 w-full rounded ${
+              formik.touched.confirmPassword && formik.errors.confirmPassword
+                ? 'border-red-500'
+                : 'border-gray-300'
+            }`}
+          />
+          {formik.touched.confirmPassword && formik.errors.confirmPassword && (
+            <p className="text-red-600 text-sm mt-1">{formik.errors.confirmPassword}</p>
+          )}
+        </div>
 
-        <input
-          type="text"
-          name="phoneNumber"
-          placeholder="Phone Number (optional)"
-          onChange={formik.handleChange}
-          value={formik.values.phoneNumber}
-          className="border border-gray-300 p-2 w-full rounded"
-        />
+        {/* Password Strength Indicator */}
+        <div className="md:col-span-2">
+          <PasswordStrength password={password} />
+        </div>
 
-        <input
-          type="text"
-          name="organization"
-          placeholder="Organization/Institution"
-          onChange={formik.handleChange}
-          value={formik.values.organization}
-          className="border border-gray-300 p-2 w-full rounded"
-        />
+        {/* Phone Number */}
+        <div>
+          <input
+            type="text"
+            name="phoneNumber"
+            placeholder="Phone Number (optional)"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.phoneNumber}
+            className={`border p-3 w-full rounded ${
+              formik.touched.phoneNumber && formik.errors.phoneNumber
+                ? 'border-red-500'
+                : 'border-gray-300'
+            }`}
+          />
+          {formik.touched.phoneNumber && formik.errors.phoneNumber && (
+            <p className="text-red-600 text-sm mt-1">{formik.errors.phoneNumber}</p>
+          )}
+        </div>
 
-        <textarea
-          name="interests"
-          placeholder="Interests (e.g., Tourism, Research)"
-          onChange={formik.handleChange}
-          value={formik.values.interests}
-          className="border border-gray-300 p-2 w-full rounded"
-        />
+        {/* University */}
+        <div>
+          <input
+            type="text"
+            name="university"
+            placeholder="University"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.university}
+            className={`border p-3 w-full rounded ${
+              formik.touched.university && formik.errors.university
+                ? 'border-red-500'
+                : 'border-gray-300'
+            }`}
+          />
+          {formik.touched.university && formik.errors.university && (
+            <p className="text-red-600 text-sm mt-1">{formik.errors.university}</p>
+          )}
+        </div>
 
-        <ReCAPTCHA sitekey="YOUR_SITE_KEY" onChange={() => {}} />
+        {/* Course */}
+        <div>
+          <input
+            type="text"
+            name="course"
+            placeholder="Course"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.course}
+            className={`border p-3 w-full rounded ${
+              formik.touched.course && formik.errors.course
+                ? 'border-red-500'
+                : 'border-gray-300'
+            }`}
+          />
+          {formik.touched.course && formik.errors.course && (
+            <p className="text-red-600 text-sm mt-1">{formik.errors.course}</p>
+          )}
+        </div>
 
-        <button type="submit" className="bg-blue-500 text-white p-2 rounded">
-          Create Account
-        </button>
+        {/* Graduation Year */}
+        <div>
+          <input
+            type="text"
+            name="graduationYear"
+            placeholder="Graduation Year (YYYY)"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.graduationYear}
+            className={`border p-3 w-full rounded ${
+              formik.touched.graduationYear && formik.errors.graduationYear
+                ? 'border-red-500'
+                : 'border-gray-300'
+            }`}
+          />
+          {formik.touched.graduationYear && formik.errors.graduationYear && (
+            <p className="text-red-600 text-sm mt-1">{formik.errors.graduationYear}</p>
+          )}
+        </div>
+
+        {/* Currently Studying Checkbox */}
+        <div className="md:col-span-2">
+          <label className="flex items-center">
+            <input
+              type="checkbox"
+              name="currentlyStudying"
+              checked={currentlyStudying}
+              onChange={handleCurrentlyStudyingChange}
+              className="mr-2"
+            />
+            Currently Studying
+          </label>
+        </div>
+
+        {/* Gender Selection */}
+        <div className="md:col-span-2">
+          <select
+            name="gender"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.gender}
+            className={`border p-3 w-full rounded ${
+              formik.touched.gender && formik.errors.gender
+                ? 'border-red-500'
+                : 'border-gray-300'
+            }`}
+          >
+            <option value="">Select Gender</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+            <option value="other">Other</option>
+          </select>
+          {formik.touched.gender && formik.errors.gender && (
+            <p className="text-red-600 text-sm mt-1">{formik.errors.gender}</p>
+          )}
+        </div>
+
+        {/* Interests in FoTI */}
+        <div className="md:col-span-2">
+          <textarea
+            name="interestsInFoTI"
+            placeholder="What are your interests in FoTI?"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.interestsInFoTI}
+            className={`border p-3 w-full rounded ${
+              formik.touched.interestsInFoTI && formik.errors.interestsInFoTI
+                ? 'border-red-500'
+                : 'border-gray-300'
+            }`}
+          />
+          {formik.touched.interestsInFoTI && formik.errors.interestsInFoTI && (
+            <p className="text-red-600 text-sm mt-1">{formik.errors.interestsInFoTI}</p>
+          )}
+        </div>
+
+        {/* Error Message */}
+        {errorMessage && (
+          <div className="md:col-span-2">
+            <p className="text-red-600 text-sm">{errorMessage}</p>
+          </div>
+        )}
+
+        {/* CAPTCHA */}
+        <div className="md:col-span-2">
+          <ReCAPTCHA
+            sitekey="your-recaptcha-site-key" // Replace with your site key
+            onChange={handleCaptchaChange}
+          />
+        </div>
+
+        {/* Submit Button */}
+        <div className="md:col-span-2">
+          <button
+            type="submit"
+            disabled={formik.isSubmitting}
+            className="bg-blue-500 text-white p-3 rounded w-full hover:bg-blue-700"
+          >
+            {formik.isSubmitting ? 'Signing Up...' : 'Sign Up'}
+          </button>
+        </div>
       </form>
     </div>
+    
   );
 };
 
