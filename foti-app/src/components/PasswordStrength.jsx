@@ -1,60 +1,64 @@
-import React, { useState } from 'react';
+// src/components/PasswordStrength.jsx
+import React from 'react';
 
-const PasswordStrength = () => {
-  const [password, setPassword] = useState('');
-  const [strength, setStrength] = useState('');
+const PasswordStrength = ({ password }) => {
+  const calculateStrength = () => {
+    let strength = 0;
+    if (password.length >= 6) strength += 1;
+    if (/[A-Z]/.test(password)) strength += 1;
+    if (/[0-9]/.test(password)) strength += 1;
+    if (/[^A-Za-z0-9]/.test(password)) strength += 1;
+    return strength;
+  };
 
-  const checkPasswordStrength = (password) => {
-    let strengthScore = 0;
+  const strength = calculateStrength();
 
-    // Check length
-    if (password.length >= 8) strengthScore++;
-    // Check for numbers
-    if (/[0-9]/.test(password)) strengthScore++;
-    // Check for special characters
-    if (/[^a-zA-Z0-9]/.test(password)) strengthScore++;
-    // Check for uppercase letters
-    if (/[A-Z]/.test(password)) strengthScore++;
-
-    switch (strengthScore) {
+  const strengthLabel = () => {
+    switch (strength) {
       case 0:
       case 1:
-        setStrength('Very Weak');
-        break;
+        return 'Weak';
       case 2:
-        setStrength('Weak');
-        break;
+        return 'Moderate';
       case 3:
-        setStrength('Moderate');
-        break;
+        return 'Strong';
       case 4:
-        setStrength('Strong');
-        break;
+        return 'Very Strong';
       default:
-        setStrength('');
+        return '';
     }
   };
 
-  const handleChange = (event) => {
-    const newPassword = event.target.value;
-    setPassword(newPassword);
-    checkPasswordStrength(newPassword);
+  const strengthColor = () => {
+    switch (strength) {
+      case 0:
+      case 1:
+        return 'bg-red-500';
+      case 2:
+        return 'bg-yellow-500';
+      case 3:
+        return 'bg-foiGreen';
+      case 4:
+        return 'bg-foiBrown';
+      default:
+        return 'bg-gray-300';
+    }
   };
 
   return (
-    <div className="mb-4">
-      <input
-        type="password"
-        placeholder="Enter your password"
-        value={password}
-        onChange={handleChange}
-        className="border border-gray-300 p-2 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-      />
-      <div className={`mt-2 text-sm font-bold ${strength === 'Very Weak' ? 'text-red-500' : strength === 'Weak' ? 'text-orange-500' : strength === 'Moderate' ? 'text-yellow-500' : strength === 'Strong' ? 'text-green-500' : ''}`}>
-        {strength}
+    <div className="mt-2">
+      <div className="w-full bg-gray-300 rounded h-2">
+        <div
+          className={`h-2 rounded ${strengthColor()}`}
+          style={{ width: `${(strength / 4) * 100}%` }}
+        ></div>
       </div>
+      {password && (
+        <p className={`text-sm mt-1 ${strengthColor()}`}>{strengthLabel()}</p>
+      )}
     </div>
   );
 };
 
 export default PasswordStrength;
+

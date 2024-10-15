@@ -11,7 +11,7 @@ const SignUp = () => {
   const [password, setPassword] = useState('');
   const [captchaValue, setCaptchaValue] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
-  const [currentlyStudying, setCurrentlyStudying] = useState(false);
+  const [, setCurrentlyStudying] = useState(false);
   const navigate = useNavigate();
   const { login } = useContext(AuthContext);
 
@@ -69,7 +69,7 @@ const SignUp = () => {
 
         if (response.success) {
           login(response.user);
-          navigate('/dashboard');
+          navigate('/Dashboard');
         } else {
           setErrorMessage(response.message || 'Sign-up failed.');
         }
@@ -123,7 +123,7 @@ const SignUp = () => {
 
   return (
     <div className="container mx-auto p-6 max-w-2xl">
-      <h1 className="text-3xl font-bold text-center mb-6">Register for Endless Possibilities</h1>
+      <h1 className="text-3xl font-bold text-center mb-8 mt-12">Register for Endless Possibilities</h1>
       <form onSubmit={formik.handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Student Name */}
         <div>
@@ -275,10 +275,11 @@ const SignUp = () => {
           <input
             type="text"
             name="graduationYear"
-            placeholder="Graduation Year (YYYY)"
+            placeholder="Graduation Year (optional)"
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             value={formik.values.graduationYear}
+            disabled={formik.values.currentlyStudying} // Disable if currently studying
             className={`border p-3 w-full rounded ${
               formik.touched.graduationYear && formik.errors.graduationYear
                 ? 'border-red-500'
@@ -291,21 +292,20 @@ const SignUp = () => {
         </div>
 
         {/* Currently Studying Checkbox */}
-        <div className="md:col-span-2">
-          <label className="flex items-center">
-            <input
-              type="checkbox"
-              name="currentlyStudying"
-              checked={currentlyStudying}
-              onChange={handleCurrentlyStudyingChange}
-              className="mr-2"
-            />
-            Currently Studying
-          </label>
+        <div className="md:col-span-2 flex items-center">
+          <input
+            type="checkbox"
+            name="currentlyStudying"
+            checked={formik.values.currentlyStudying}
+            onChange={handleCurrentlyStudyingChange}
+            className="mr-2"
+          />
+          <label className="text-gray-700">Currently Studying</label>
         </div>
 
-        {/* Gender Selection */}
+        {/* Gender */}
         <div className="md:col-span-2">
+          <label className="block mb-1 text-gray-700">Gender</label>
           <select
             name="gender"
             onChange={formik.handleChange}
@@ -317,10 +317,9 @@ const SignUp = () => {
                 : 'border-gray-300'
             }`}
           >
-            <option value="">Select Gender</option>
-            <option value="male">Male</option>
-            <option value="female">Female</option>
-            <option value="other">Other</option>
+            <option value="" label="Select Gender" />
+            <option value="male" label="Male" />
+            <option value="female" label="Female" />
           </select>
           {formik.touched.gender && formik.errors.gender && (
             <p className="text-red-600 text-sm mt-1">{formik.errors.gender}</p>
@@ -331,7 +330,7 @@ const SignUp = () => {
         <div className="md:col-span-2">
           <textarea
             name="interestsInFoTI"
-            placeholder="What are your interests in FoTI?"
+            placeholder="Your Interests in FoTI"
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             value={formik.values.interestsInFoTI}
@@ -353,27 +352,33 @@ const SignUp = () => {
           </div>
         )}
 
-        {/* CAPTCHA */}
+        {/* ReCAPTCHA */}
         <div className="md:col-span-2">
           <ReCAPTCHA
-            sitekey="your-recaptcha-site-key" // Replace with your site key
+            sitekey="6Lfby18qAAAAAKZG4x1s0prPi_HEbEOnb5vPAowQ" // Replace with your ReCAPTCHA site key
             onChange={handleCaptchaChange}
           />
         </div>
 
         {/* Submit Button */}
-        <div className="md:col-span-2">
-          <button
-            type="submit"
-            disabled={formik.isSubmitting}
-            className="bg-blue-500 text-white p-3 rounded w-full hover:bg-blue-700"
-          >
-            {formik.isSubmitting ? 'Signing Up...' : 'Sign Up'}
-          </button>
-        </div>
+        <div className="md:col-span-2 flex justify-center">
+  <button
+    type="submit"
+    disabled={formik.isSubmitting || !captchaValue}
+    className="
+      bg-blue-600 text-white font-bold py-2 px-4 rounded 
+      hover:bg-blue-700 disabled:opacity-50 
+      sm:w-full sm:px-3 sm:text-sm 
+      md:w-auto md:px-6 md:text-base 
+      lg:py-3 lg:px-8 lg:text-lg 
+      transition-all duration-300 ease-in-out"
+  >
+    {formik.isSubmitting ? 'Submitting...' : 'Sign Up'}
+  </button>
+</div>
+
       </form>
     </div>
-    
   );
 };
 
