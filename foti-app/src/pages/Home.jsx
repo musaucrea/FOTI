@@ -1,11 +1,10 @@
 // src/pages/Home.jsx
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import { FaFacebookF, FaTwitter, FaLinkedinIn, FaInstagram } from 'react-icons/fa';
 import { motion } from 'framer-motion';
-import TextTransition, { presets } from 'react-text-transition';
 
 // Importing images
 import heroImage from '../assets/heroimage1.svg';
@@ -14,28 +13,31 @@ import safariImage from '../assets/IMG-20240328-WA0059.jpg';
 import culturalImage from '../assets/IMG-20240328-WA0079.jpg';
 import beachImage from '../assets/IMG-20240328-WA0037.jpg';
 
-const texts = [
-  'The Foundations of Tourism Institute (FoTI) is the only institute in the world that empowers students to lead the future of tourism through hands-on training, research-driven projects, and community collaboration.',
-  'FoTI uniquely bridges education and real-world applications, fostering entrepreneurship and responsible tourism practices.',
-  'Our Travel Agency for Hire concept gives tourism students on-the-job training and facilitates them to be self-employed.',
-  'Our programs include interactive workshops, field experiences, and collaborations with industry leaders.',
-];
-
 const Home = () => {
   const navigate = useNavigate();
-  const [index, setIndex] = useState(0); // State for tracking the current text index
+
   useEffect(() => {
     AOS.init({
       duration: 1000,
       once: true,
     });
-    const interval = setInterval(() => {
-      setIndex((prevIndex) => (prevIndex + 1) % texts.length);
-    }, 3000); // Change text every 3 seconds
-
-    return () => clearInterval(interval); // Cleanup interval on component unmount
   }, []);
+  const messages = [
+    'The Foundations of Tourism Institute (FoTI) is the only institute in the world that empowers students to lead the future of tourism through hands-on training, research-driven projects, and community collaboration.',
+    'FoTI uniquely bridges education and real-world applications, fostering entrepreneurship and responsible tourism practices.',
+    'Our Travel Agency for Hire concept gives tourism students on-the-job training and facilitates them to be self-employed.',
+    'Our programs include interactive workshops, field experiences, and collaborations with industry leaders.'
+  ];
+  const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      // Change to the next message, or go back to the first one if it's the last message
+      setCurrentMessageIndex((prevIndex) => (prevIndex + 1) % messages.length);
+    }, 3000); // 3000 milliseconds = 3 seconds
 
+    // Clean up the interval when the component is unmounted
+    return () => clearInterval(interval);
+  }, [messages.length]);
   // Function to Navigate to Sign-Up Page
   const handleStartJourney = () => navigate('/SignUp');
 
@@ -51,6 +53,9 @@ const Home = () => {
           animate={{ opacity: 1 }}
           transition={{ duration: 1 }}
         >
+           <div className="text-center p-4 bg-blue-100 text-blue-900 rounded-lg shadow-md">
+      <p className="text-lg font-semibold">{messages[currentMessageIndex]}</p>
+    </div>
           <img 
             src={heroImage} 
             alt="Tourism" 
@@ -71,11 +76,6 @@ const Home = () => {
             >
               Join the Waitlist
             </motion.button>
-            <TextTransition
-              text={texts[index]} // Use the current text based on index
-              springConfig={presets.wobbly} // Add a spring configuration for transition effect
-              className="text-2xl font-semibold text-center"
-            />
           </div>
         </motion.div>
 
@@ -175,46 +175,230 @@ const Home = () => {
               transition={{ duration: 0.5, delay: 0.4 }}
             >
               <h3 className="text-2xl font-semibold text-[#1877F2]">
-                Innovating Local Tourism
+                Sustainable Tourism in Kenya
               </h3>
               <p className="text-gray-600 mt-2">
-                Follow John as he partnered with local businesses to enhance tourism experiences in his community.
+                John, a postgraduate student, developed a sustainable eco-tour that contributed to local wildlife conservation.
               </p>
               <a 
                 href="#"
                 className="mt-4 inline-block text-[#F97316] font-medium hover:underline"
               >
-                Watch the Documentary
+                Read the Publication
               </a>
+            </motion.div>
+          </div>
+
+          <div className="mt-8 text-center">
+            <motion.a 
+              href="#"
+              className="inline-block bg-[#F97316] text-white py-2 px-6 rounded-md transition duration-300"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              See More Success Stories
+            </motion.a>
+          </div>
+        </section>
+
+        {/* Why FoTI Section */}
+        <section id="why-foti" className="mt-12 p-8" data-aos="fade-up">
+          <h2 className="text-4xl font-bold text-[#1877F2] text-left">Why FoTI?</h2>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mt-4">
+            {/* Key Features */}
+            <motion.div
+              className="p-4 border rounded-lg flex flex-col items-left"
+              data-aos="flip-left"
+              initial={{ opacity: 0, rotateY: 90 }}
+              animate={{ opacity: 1, rotateY: 0 }}
+              transition={{ duration: 0.6 }}
+            >
+              <h3 className="font-bold text-left">Innovative Learning Model</h3>
+              <p className="text-left">Gain hands-on experience while earning academic credits.</p>
+            </motion.div>
+            <motion.div
+              className="p-4 border rounded-lg flex flex-col items-left"
+              data-aos="flip-left"
+              initial={{ opacity: 0, rotateY: 90 }}
+              animate={{ opacity: 1, rotateY: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+            >
+              <h3 className="font-bold text-left">Revenue from Your Products</h3>
+              <p className="text-left">Students create and sell their tour packages, reinvesting in their own development.</p>
+            </motion.div>
+            <motion.div
+              className="p-4 border rounded-lg flex flex-col items-left"
+              data-aos="flip-left"
+              initial={{ opacity: 0, rotateY: 90 }}
+              animate={{ opacity: 1, rotateY: 0 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+            >
+              <h3 className="font-bold text-left">Professional Opportunities</h3>
+              <p className="text-left">Graduates can become certified travel agents and compete for postgraduate scholarships.</p>
+            </motion.div>
+            <motion.div
+              className="p-4 border rounded-lg flex flex-col items-left"
+              data-aos="flip-left"
+              initial={{ opacity: 0, rotateY: 90 }}
+              animate={{ opacity: 1, rotateY: 0 }}
+              transition={{ duration: 0.6, delay: 0.6 }}
+            >
+              <h3 className="font-bold text-left">Global Exposure</h3>
+              <p className="text-left">Promote your tours on our website, social media platforms, and YouTube channel, allowing you to be discovered by employers and partners worldwide.</p>
             </motion.div>
           </div>
         </section>
 
-        {/* Gallery Section */}
-        <section id="gallery" className="mt-12 p-4" data-aos="fade-up">
-          <h2 className="text-4xl font-bold text-[#1877F2] text-left">Gallery</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
-            <img src={safariImage} alt="Safari" className="w-full rounded-lg" />
-            <img src={culturalImage} alt="Cultural" className="w-full rounded-lg" />
-            <img src={beachImage} alt="Beach" className="w-full rounded-lg" />
+        {/* Tour Packages Section */}
+        <section id="tour-packages" className="mt-12 p-8" data-aos="fade-up">
+          <h2 className="text-4xl font-bold text-[#1877F2] text-left">Discover Our Student-Created Tours</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-4">
+            {/* Tour Package Card */}
+            <motion.div
+              className="bg-[#60A5FA] p-4 rounded-lg"
+              data-aos="zoom-in"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              whileHover={{ scale: 1.02 }}
+            >
+              <img src={safariImage} alt="Safari Adventure" className="w-full h-48 object-cover rounded-lg" />
+              <h3 className="text-lg font-bold mt-4">Safari Adventure</h3>
+              <p>A thrilling safari experience awaits you!</p>
+              <motion.button
+                className="mt-2 bg-[#16A34A] text-white py-2 px-4 rounded transition duration-300"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                Book Tour
+              </motion.button>
+            </motion.div>
+
+            {/* Cultural Immersion Card */}
+            <motion.div
+              className="bg-[#60A5FA] p-4 rounded-lg"
+              data-aos="zoom-in"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+              whileHover={{ scale: 1.02 }}
+            >
+              <img src={culturalImage} alt="Cultural Immersion" className="w-full h-48 object-cover rounded-lg" />
+              <h3 className="text-lg font-bold mt-4">Cultural Immersion</h3>
+              <p>Experience rich cultures and traditions.</p>
+              <motion.button
+                className="mt-2 bg-[#16A34A] text-white py-2 px-4 rounded transition duration-300"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                Book Tour
+              </motion.button>
+            </motion.div>
+
+            {/* Beach Getaway Card */}
+            <motion.div
+              className="bg-[#60A5FA] p-4 rounded-lg"
+              data-aos="zoom-in"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, delay: 0.6 }}
+              whileHover={{ scale: 1.02 }}
+            >
+              <img src={beachImage} alt="Beach Getaway" className="w-full h-48 object-cover rounded-lg" />
+              <h3 className="text-lg font-bold mt-4">Beach Getaway</h3>
+              <p>Relax and unwind at stunning beaches.</p>
+              <motion.button
+                className="mt-2 bg-[#16A34A] text-white py-2 px-4 rounded transition duration-300"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                Book Tour
+              </motion.button>
+            </motion.div>
           </div>
         </section>
 
-        {/* Footer Section */}
-        <footer className="mt-12 p-4 bg-[#1877F2] text-white">
-          <div className="flex flex-col items-center">
-            <p className="mb-4">Connect with us on social media</p>
+        {/* Call to Action Section */}
+        <motion.section
+          className="bg-[#1E3A8A] text-white text-center py-8 mt-12"
+          data-aos="fade-up"
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <h2 className="text-3xl font-bold">Join Us Today!</h2>
+          <p className="mt-2">Be a part of something great. Explore your potential with FoTI.</p>
+          <motion.button 
+            onClick={handleStartJourney}
+            className="mt-4 bg-[#F97316] py-2 px-4 rounded transition duration-300"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            Join the Waitlist
+          </motion.button>
+        </motion.section>
+      </div>
+
+      {/* Footer Section */}
+      <footer className="bg-gray-800 text-gray-200 py-6">
+        <div className="container mx-auto px-6 md:flex md:justify-between">
+          {/* Company Info */}
+          <div className="mb-6 md:mb-0">
+            <h2 className="text-xl font-bold">FoTI</h2>
+            <p className="mt-2 text-sm">
+              Foundations of Tourism Institute - Empowering students through research and professional growth.
+            </p>
+          </div>
+
+          {/* Quick Links */}
+          <div className="mb-6 md:mb-0">
+            <h3 className="text-lg font-semibold mb-2">Quick Links</h3>
+            <ul>
+              <li className="mb-1">
+                <a href="/privacy" className="hover:underline">
+                  Privacy Policy
+                </a>
+              </li>
+              <li className="mb-1">
+                <a href="/terms" className="hover:underline">
+                  Terms of Service
+                </a>
+              </li>
+              <li className="mb-1">
+                <a href="/contact" className="hover:underline">
+                  Contact Us
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          {/* Social Media */}
+          <div>
+            <h3 className="text-lg font-semibold mb-2">Follow Us</h3>
             <div className="flex space-x-4">
-              <a href="#" aria-label="Facebook"><FaFacebookF /></a>
-              <a href="#" aria-label="Twitter"><FaTwitter /></a>
-              <a href="#" aria-label="LinkedIn"><FaLinkedinIn /></a>
-              <a href="#" aria-label="Instagram"><FaInstagram /></a>
+              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="hover:text-white">
+                <FaFacebookF />
+              </a>
+              <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" aria-label="Twitter" className="hover:text-white">
+                <FaTwitter />
+              </a>
+              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="hover:text-white">
+                <FaLinkedinIn />
+              </a>
+              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="hover:text-white">
+                <FaInstagram />
+              </a>
             </div>
           </div>
-        </footer>
-      </div>
+        </div>
+
+        {/* Bottom Bar */}
+        <div className="mt-6 border-t border-gray-700 pt-4 text-center text-sm">
+          &copy; {new Date().getFullYear()} FoTI. All rights reserved.
+        </div>
+      </footer>
     </div>
   );
-};
+}
 
 export default Home;
