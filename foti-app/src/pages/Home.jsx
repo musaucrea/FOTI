@@ -1,10 +1,10 @@
 // src/pages/Home.jsx
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 import AOS from 'aos';
-import 'aos/dist/aos.css';
+import 'aos/dist/aos.css'; // Import AOS styles
 import { FaFacebookF, FaTwitter, FaLinkedinIn, FaInstagram } from 'react-icons/fa';
-import { motion } from 'framer-motion';
 
 // Importing images
 import heroImage from '../assets/heroimage1.svg';
@@ -22,62 +22,60 @@ const Home = () => {
       once: true,
     });
   }, []);
+
   const messages = [
     'The Foundations of Tourism Institute (FoTI) is the only institute in the world that empowers students to lead the future of tourism through hands-on training, research-driven projects, and community collaboration.',
     'FoTI uniquely bridges education and real-world applications, fostering entrepreneurship and responsible tourism practices.',
     'Our Travel Agency for Hire concept gives tourism students on-the-job training and facilitates them to be self-employed.',
-    'Our programs include interactive workshops, field experiences, and collaborations with industry leaders.'
+    'Our core values are innovation,sustainability,collaboration, and excellence.'
   ];
   const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
+
   useEffect(() => {
     const interval = setInterval(() => {
-      // Change to the next message, or go back to the first one if it's the last message
       setCurrentMessageIndex((prevIndex) => (prevIndex + 1) % messages.length);
-    }, 3000); // 3000 milliseconds = 3 seconds
+    }, 5000);
 
-    // Clean up the interval when the component is unmounted
     return () => clearInterval(interval);
   }, [messages.length]);
-  // Function to Navigate to Sign-Up Page
+
   const handleStartJourney = () => navigate('/SignUp');
 
   return (
     <div className="flex flex-col min-h-screen">
-      {/* Main Content */}
       <div className="flex-grow">
         {/* Hero Section */}
-        <motion.div
-          className="relative w-full h-screen mt-8 mx-0"
-          data-aos="fade-in"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1 }}
-        >
-           <div className="text-center p-4 bg-blue-100 text-blue-900 rounded-lg shadow-md">
-      <p className="text-lg font-semibold">{messages[currentMessageIndex]}</p>
-    </div>
+        <div className="relative w-full h-screen">
           <img 
             src={heroImage} 
             alt="Tourism" 
             className="absolute inset-0 w-full h-full object-cover z-0"
           />
-          <div className="absolute inset-0 flex flex-col items-center justify-center text-center bg-black bg-opacity-50 p-8">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white px-4">
+          <div className="absolute inset-0 flex flex-col items-center justify-center text-center bg-black bg-opacity-50 p-8 z-5">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white px-4 mb-6">
               Welcome to Foundations of Tourism Institute
             </h1>
-            <p className="mt-4 text-lg sm:text-xl md:text-2xl text-white px-6 max-w-xl">
-              Our Travel Agency for Hire concept gives tourism students on-the-job training and facilitates them to be self-employed.
-            </p>
+            
+            {/* Transitioning text */}
+            <div className="h-32 flex items-center justify-center  bg-opacity-80 rounded-lg shadow-lg p-4 mx-auto max-w-3xl">
+              <p 
+                key={currentMessageIndex} 
+                className="text-lg sm:text-xl md:text-2xl text-white font-semibold leading-tight transition-all duration-500 ease-in-out"
+              >
+                {messages[currentMessageIndex]}
+              </p>
+            </div>
+
             <motion.button
               onClick={handleStartJourney}
-              className="mt-6 bg-[#F97316] text-white py-2 px-6 rounded transition duration-300"
+              className="mt-8 bg-[#F97316] text-white py-3 px-8 rounded-full text-lg font-semibold transition duration-300 hover:bg-[#E86305] focus:outline-none focus:ring-2 focus:ring-[#F97316] focus:ring-opacity-50"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
               Join the Waitlist
             </motion.button>
           </div>
-        </motion.div>
+        </div>
 
         {/* About Us Section */}
         <section id="about" className="mt-12 p-8" data-aos="fade-up">
