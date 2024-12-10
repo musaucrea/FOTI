@@ -8,10 +8,10 @@ import Careers from './pages/Careers';
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
 import Donate from './pages/Donate'; // Import the Donate component
-import NotFound from './pages/FotiVentures.jsx';
+import NotFound from './pages/FotiVentures';
 import Dashboard from './components/Dashboard';
 import CreatePackage from './components/CreatePackage';
-import RegistrationComponent from './components/RegistrationComponent.jsx'; // Replace with your actual path
+import RegistrationComponent from './components/RegistrationComponent'; // Replace with your actual path
 import LoadingSpinner from './components/LoadingSpinner';
 import ResearchPage from './components/Research/ResearchPage';
 import { AuthProvider } from './contexts/AuthContext';
@@ -20,7 +20,7 @@ import Profile from './components/Profile';
 import Footer from './components/Footer';
 //import Research from ".pages/Research.jsx" ;
 // Lazy load the Research component for performance optimization
-const Research = lazy(() => import('./pages/Research.jsx'));
+const Research = lazy(() => import('./pages/Research'));
 
 function App() {
   return (
