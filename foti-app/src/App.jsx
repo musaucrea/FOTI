@@ -8,7 +8,7 @@ import Careers from './pages/Careers';
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
 import Donate from './pages/Donate'; // Import the Donate component
-import NotFound from './pages/FotiVentures';
+// import NotFound from './pages/FotiVentures';
 import Dashboard from './components/Dashboard';
 import CreatePackage from './components/CreatePackage';
 import RegistrationComponent from './components/RegistrationComponent'; // Replace with your actual path
@@ -37,7 +37,7 @@ function App() {
           <Route path="/sign-in" element={<SignIn />} />
           <Route path="/donate" element={<Donate />} /> {/* Add Donate Route */}
           <Route path="/SignUp" element={<SignUp />} />
-          <Route path="*" element={<NotFound />} /> {/* Add this line */}
+          {/* <Route path="*" element={<NotFound />} /> Add this line */}
           <Route path="/dashboard" element={<Dashboard />} /> {/* Fixed path for Dashboard */}
           <Route path="/create-package" element={<CreatePackage />} />
           <Route
