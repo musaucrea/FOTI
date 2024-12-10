@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import Footer from './components/Footer';
+import Footer from '../components/Footer';
 import culturalTourismImg from '../assets/culturalTourism.jpg';
 import sustainableTravelImg from '../assets/sustainableTravel.jpg';
 import heritagePreservationImg from '../assets/heritagePreservation.jpg';
